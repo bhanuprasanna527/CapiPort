@@ -177,7 +177,7 @@ if num_tick > 1:
     # Add title and axis labels
     fig.update_layout(
         title='Portfolio Returns Vs. Risk',
-        xaxis=dict(title='Standard Deviation'),
+        xaxis=dict(title='Standard Deviation / Volatility'),
         yaxis=dict(title='Returns')
     )
 
