@@ -4,8 +4,6 @@ import yfinance as yf
 import streamlit as st
 import plotly.graph_objects as go
 
-st.set_page_config(layout="wide")
-
 with open(r"style/style.css") as css:
     st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
 
