@@ -4,6 +4,14 @@ import yfinance as yf
 import streamlit as st
 import plotly.graph_objects as go
 
+st.set_page_config(layout="wide")
+
+st.markdown("<h1 style='text-align: center;'><u>CapiPort</u></h1>", unsafe_allow_html=True)
+st.markdown("<h5 style='text-align: center; color: gray;'>Your Portfolio Optimisation Tool</h5>", unsafe_allow_html=True)
+st.divider()
+
+
+
 list_df = pd.read_csv("Data/Company List.csv")
 
 company_name = list_df["Name"].to_list()
@@ -62,7 +70,9 @@ if num_tick > 1:
         'rebalance_weights': rebal_weig
     })
 
-    st.write('PORTFOLIO WEIGHTS:')
+    st.divider()
+
+    st.markdown("<h5 style='text-align: center;'>Random Portfolio Weights</h5>", unsafe_allow_html=True)
     st.dataframe(weights_df, use_container_width=True)
 
 
@@ -73,8 +83,10 @@ if num_tick > 1:
         'Portfolio Sharpe Ratio': sharpe_ratio
     }, index=[0])
 
-    st.write('PORTFOLIO METRICS:')
+    st.markdown("<h5 style='text-align: center;'>Random Weights Metrics</h5>", unsafe_allow_html=True)
     st.dataframe(metrics_df, use_container_width=True)
+
+    st.divider()
 
     ## Let's get started with Monte Carlo Simulations
 
@@ -132,7 +144,8 @@ if num_tick > 1:
     sim_df = sim_df.infer_objects()
 
     # Print out the results.
-    st.write('SIMULATIONS RESULT:')
+    st.write("\n\n")
+    st.markdown("<h4 style='text-align: center;'>Simulation Results</h4>", unsafe_allow_html=True)
     st.dataframe(sim_df.head(), use_container_width=True)
 
     # Return the Max Sharpe Ratio from the run.
@@ -146,7 +159,7 @@ if num_tick > 1:
         'random_weights': max_sharpe_ratio["Portfolio Weights"],
     })
 
-    st.write('MAX SHARPE RATIO:')
+    st.markdown("<h5 style='text-align: center;'>Portfolio with Max Sharpe Ratio</h5>", unsafe_allow_html=True)
     st.dataframe(max_sharpe_ratio, use_container_width=True)
     st.dataframe(max_sharpe_weights_df, use_container_width=True)
 
@@ -155,9 +168,13 @@ if num_tick > 1:
         'random_weights': min_volatility["Portfolio Weights"],
     })
 
-    st.write('MIN VOLATILITY:')
+    st.markdown("<h5 style='text-align: center;'>Portfolio with Min Volatility</h5>", unsafe_allow_html=True)
     st.dataframe(min_volatility, use_container_width=True)
     st.dataframe(min_volatility_weights_df, use_container_width=True)
+
+    st.divider()
+
+    st.markdown("<h1 style='text-align: center;'>Plotting</h1>", unsafe_allow_html=True)
 
     fig = go.Figure(data=go.Scatter(
         x=sim_df['Volatility'],
