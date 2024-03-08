@@ -21,8 +21,11 @@ num_tick = len(com_sel)
 
 if num_tick > 1:
 
-    com_data = yf.download(com_sel, start="2019-03-01", end="2024-03-01")['Adj Close']
+    com_data = yf.download(com_sel, start="1900-01-01", end="2024-03-08")['Adj Close']
     com_data.dropna(inplace = True)
+
+    com_sel = com_data.columns.to_list()
+    com_sel_name.sort()
 
     st.dataframe(com_data, use_container_width=True)
 
@@ -76,7 +79,7 @@ if num_tick > 1:
     ## Let's get started with Monte Carlo Simulations
 
     ## How many times should we run Monte Carlo
-    num_of_port = 5000
+    num_of_port = 8000
 
     ## Create an Array to store the weights as they are generated
     all_weights = np.zeros((num_of_port, num_tick))
