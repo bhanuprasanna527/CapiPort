@@ -38,9 +38,13 @@ company_name = list_df["Name"].to_list()
 company_symbol = (list_df["Ticker"] + ".NS").to_list()
 
 company_dict = dict()
+company_symbol_dict = dict()
 
 for CSymbol, CName in zip(company_symbol, company_name):
     company_dict[CName] = CSymbol
+
+for CSymbol, CName in zip(company_symbol, company_name):
+    company_symbol_dict[CSymbol] = CName
 
 st.markdown(
     """ 
@@ -63,7 +67,14 @@ num_tick = len(com_sel)
 if num_tick > 1:
 
     com_data = yf.download(com_sel, start="1900-01-01", end="2024-03-08")["Adj Close"]
+    for i in com_data.columns:
+        com_data.dropna(axis=1, how='all', inplace=True)
     com_data.dropna(inplace=True)
+    num_tick = len(com_data.columns)
+
+    com_sel_name_temp = []
+    for i in com_data.columns:
+        com_sel_name_temp.append(company_symbol_dict[i])
 
     com_sel = com_data.columns.to_list()
     com_sel_name.sort()
@@ -91,7 +102,7 @@ if num_tick > 1:
     # Put the weights into a data frame to see them better.
     weights_df = pd.DataFrame(
         data={
-            "company_name": com_sel_name,
+            "company_name": com_sel_name_temp,
             "random_weights": rand_weig,
             "rebalance_weights": rebal_weig,
         }
@@ -187,7 +198,7 @@ if num_tick > 1:
 
     max_sharpe_weights_df = pd.DataFrame(
         data={
-            "company_name": com_sel_name,
+            "company_name": com_sel_name_temp,
             "random_weights": max_sharpe_ratio["Portfolio Weights"],
         }
     )
@@ -201,7 +212,7 @@ if num_tick > 1:
 
     min_volatility_weights_df = pd.DataFrame(
         data={
-            "company_name": com_sel_name,
+            "company_name": com_sel_name_temp,
             "random_weights": min_volatility["Portfolio Weights"],
         }
     )
