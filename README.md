@@ -1,3 +1,4 @@
+[![Build Status](https://github.com/bhanuprasanna527/CapiPort/actions/workflows/main.yml/badge.svg)](https://github.com/bhanuprasanna527/CapiPort/actions)
 
 ---
 title: CapiPort
