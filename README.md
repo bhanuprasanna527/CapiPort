@@ -47,23 +47,32 @@ Mean-Variance Portfolio Optimization is a widely used method in finance for cons
 Methodology
 1. Basic Concepts
 
-    Expected Return: The anticipated gain or loss from an investment, based on historical data or other factors.
-    Risk (Variance): A measure of the dispersion of returns. In portfolio optimization, we seek to minimize the variance of the portfolio returns.
+   Expected Return: The anticipated gain or loss from an investment, based on historical data or other factors.
 
-2. Optimization Algorithm
+   Risk (Variance): A measure of the dispersion of returns. In portfolio optimization, we seek to minimize the variance of the portfolio returns.
+
+3. Optimization Algorithm
    
    Our implementation utilizes the following steps:
+
    Input Data: Historical returns for each asset in the portfolio.
+
    Objective Function: Construct an objective function that combines the expected return and variance.
+
    Optimization Algorithm: We employ a mean-variance optimization algorithm that iteratively adjusts the weights to find the optimal combination.
+
    Convergence Criteria: The algorithm iterates over a specified number of iterations (e.g., 5000) or until convergence is achieved.
 
-3. Implementation
+4. Implementation
 
    In our project, we have implemented the Mean-Variance Portfolio Optimization method with 5000 iterations. The process involves:
+
    Input: Historical return data for each equity in the Indian market.
+
    Objective: Maximize expected return while minimizing portfolio variance.
+
    Optimization: Utilize an iterative approach, adjusting weights to find the optimal allocation.
+
    Output: The final set of weights that represent the optimal portfolio allocation.
 
 #### Contributing
