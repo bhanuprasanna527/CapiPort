@@ -51,24 +51,22 @@ Methodology
     Risk (Variance): A measure of the dispersion of returns. In portfolio optimization, we seek to minimize the variance of the portfolio returns.
 
 2. Optimization Algorithm
-
-Our implementation utilizes the following steps:
-Input Data: Historical returns for each asset in the portfolio.
-Objective Function: Construct an objective function that combines the expected return and variance.
-Optimization Algorithm: We employ a mean-variance optimization algorithm that iteratively adjusts the weights to find the optimal combination.
-Convergence Criteria: The algorithm iterates over a specified number of iterations (e.g., 5000) or until convergence is achieved.
+   
+   Our implementation utilizes the following steps:
+   Input Data: Historical returns for each asset in the portfolio.
+   Objective Function: Construct an objective function that combines the expected return and variance.
+   Optimization Algorithm: We employ a mean-variance optimization algorithm that iteratively adjusts the weights to find the optimal combination.
+   Convergence Criteria: The algorithm iterates over a specified number of iterations (e.g., 5000) or until convergence is achieved.
 
 3. Implementation
 
-In our project, we have implemented the Mean-Variance Portfolio Optimization method with 5000 iterations. The process involves:
-Input: Historical return data for each equity in the Indian market.
-Objective: Maximize expected return while minimizing portfolio variance.
-Optimization: Utilize an iterative approach, adjusting weights to find the optimal allocation.
-Output: The final set of weights that represent the optimal portfolio allocation.
+   In our project, we have implemented the Mean-Variance Portfolio Optimization method with 5000 iterations. The process involves:
+   Input: Historical return data for each equity in the Indian market.
+   Objective: Maximize expected return while minimizing portfolio variance.
+   Optimization: Utilize an iterative approach, adjusting weights to find the optimal allocation.
+   Output: The final set of weights that represent the optimal portfolio allocation.
 
-    
 #### Contributing
-
 We welcome contributions! If you have any ideas for improvements, open an issue or submit a pull request.
 License
 
