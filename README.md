@@ -50,7 +50,7 @@ Methodology
     Expected Return: The anticipated gain or loss from an investment, based on historical data or other factors.
     Risk (Variance): A measure of the dispersion of returns. In portfolio optimization, we seek to minimize the variance of the portfolio returns.
 
-3. Optimization Algorithm
+2. Optimization Algorithm
 
 Our implementation utilizes the following steps:
 Input Data: Historical returns for each asset in the portfolio.
@@ -58,7 +58,7 @@ Objective Function: Construct an objective function that combines the expected r
 Optimization Algorithm: We employ a mean-variance optimization algorithm that iteratively adjusts the weights to find the optimal combination.
 Convergence Criteria: The algorithm iterates over a specified number of iterations (e.g., 5000) or until convergence is achieved.
 
-4. Implementation
+3. Implementation
 
 In our project, we have implemented the Mean-Variance Portfolio Optimization method with 5000 iterations. The process involves:
 Input: Historical return data for each equity in the Indian market.
