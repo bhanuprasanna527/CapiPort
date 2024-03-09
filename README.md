@@ -47,4 +47,6 @@ License
 
 This project is licensed under the MIT License.
 
-Visit our live project: ![Portfolio Management Tool](https://capiport.streamlit.app/)
+#### Links
+1. ![Streamlit Deployment](https://capiport.streamlit.app/)
+2. ![HuggingFace Spaces](https://huggingface.co/spaces/sankhyikii/CapiPort)
