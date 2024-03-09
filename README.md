@@ -39,7 +39,51 @@ Follow these steps to get started with the project:
    ```bash
     python main.py
 
+## Technique used (Version 1) 
+###  Mean-Variance Portfolio Optimization
+Overview
 
+Mean-Variance Portfolio Optimization is a widely used method in finance for constructing an investment portfolio that maximizes expected return for a given level of risk, or equivalently minimizes risk for a given level of expected return. This approach was pioneered by Harry Markowitz and forms the foundation of Modern Portfolio Theory (MPT).
+Methodology
+1. Basic Concepts
+
+    Expected Return (μpμp​): The anticipated gain or loss from an investment, based on historical data or other factors.
+    Risk (Variance (σp2σp2​)): A measure of the dispersion of returns. In portfolio optimization, we seek to minimize the variance of the portfolio returns.
+
+2. Mathematical Formulation
+
+The basic idea is to find the optimal weights wiwi​ for each asset in the portfolio to maximize the expected portfolio return μpμp​ while minimizing the portfolio variance σp2σp2​. This can be expressed mathematically as:
+   
+   ```bash
+   Maximize:   μ_p = ∑(w_i * μ_i)
+   Subject to: ∑w_i = 1
+   Minimize:   σ_p^2 = ∑(∑(w_i * w_j * σ_ij))
+
+
+where:
+    NN is the number of assets in the portfolio.
+    μiμi​ is the expected return of asset ii.
+    σijσij​ is the covariance between the returns of assets ii and jj.
+
+3. Optimization Algorithm
+
+Our implementation utilizes the following steps:
+
+    Input Data: Historical returns for each asset in the portfolio.
+    Objective Function: Construct an objective function that combines the expected return and variance.
+    Optimization Algorithm: We employ a mean-variance optimization algorithm that iteratively adjusts the weights to find the optimal combination.
+    Convergence Criteria: The algorithm iterates over a specified number of iterations (e.g., 5000) or until convergence is achieved.
+
+4. Implementation
+
+In our project, we have implemented the Mean-Variance Portfolio Optimization method with 5000 iterations. The process involves:
+
+    Input: Historical return data for each equity in the Indian market.
+    Objective: Maximize expected return while minimizing portfolio variance.
+    Optimization: Utilize an iterative approach, adjusting weights to find the optimal allocation.
+    Output: The final set of weights that represent the optimal portfolio allocation.
+
+    
 #### Contributing
 
 We welcome contributions! If you have any ideas for improvements, open an issue or submit a pull request.
