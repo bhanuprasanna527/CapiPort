@@ -11,8 +11,8 @@ license: mit
 ---
 
 # Portfolio Management for Indian Equity Markets
+[![Build Status](https://github.com/bhanuprasanna527/CapiPort/actions/workflows/HF_sync_space.yml/badge.svg)](https://github.com/bhanuprasanna527/CapiPort/actions)
 
-[![Build Status](your_build_status_badge_url)](your_build_status_page_url) [![Tests Passing](your_tests_passing_badge_url)](your_tests_page_url)
 
 ## Overview
 
