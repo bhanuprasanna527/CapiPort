@@ -1,3 +1,15 @@
+
+
+title: CapiPort
+emoji: 📚
+colorFrom: pink
+colorTo: red
+sdk: streamlit
+sdk_version: 1.32.0
+app_file: app.py
+pinned: false
+license: mit
+
 # Portfolio Management for Indian Equity Markets
 
 [![Build Status](your_build_status_badge_url)](your_build_status_page_url) [![Tests Passing](your_tests_passing_badge_url)](your_tests_page_url)
