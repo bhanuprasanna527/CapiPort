@@ -29,7 +29,7 @@ Follow these steps to get started with the project:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repository.git
+   git clone https://github.com/bhanuprasanna527/CapiPort/
 
 2. Install dependencies:
    ```bash
