@@ -1,8 +1,6 @@
 ---
 title: CapiPort
 emoji: 🤗
-colorFrom: pink
-colorTo: red
 sdk: streamlit
 sdk_version: 1.32.0
 app_file: main.py
