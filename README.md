@@ -1,6 +1,3 @@
-[![Build Status](https://github.com/bhanuprasanna527/CapiPort/actions/workflows/main.yml/badge.svg)](https://github.com/bhanuprasanna527/CapiPort/actions)
-
----
 title: CapiPort
 emoji: 📚
 colorFrom: pink
@@ -10,7 +7,7 @@ sdk_version: 1.32.0
 app_file: main.py
 pinned: false
 license: mit
----
+
 # Portfolio Management for Indian Equity Markets
 
 [![Build Status](your_build_status_badge_url)](your_build_status_page_url) [![Tests Passing](your_tests_passing_badge_url)](your_tests_page_url)
