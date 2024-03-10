@@ -3,6 +3,9 @@ import numpy as np
 import yfinance as yf
 import streamlit as st
 import plotly.graph_objects as go
+import time
+import sys
+
 
 with open(r"style/style.css") as css:
     st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
@@ -164,9 +167,13 @@ if num_tick > 1:
         ## Create an Array to store the Sharpe Ratios as they are generated
         sharpe_arr = np.zeros(num_of_port)
 
-        ## Let's start the Monte Carlo Simulation
+        ## Track Progress with a Bar
+        progress_text = "Operation in progress. Please wait."
+        my_bar = st.progress(0, text=progress_text)
 
-        for ind in range(num_of_port):
+        ## Let's start the Monte Carlo Simulation
+        for ind in range(num_of_port):  # Corrected the range to iterate from 0 to num_of_port
+            time.sleep(0.001)
             ## Let's first Calculate the Weights
             weig = np.array(np.random.random(num_tick))
             weig = weig / np.sum(weig)
@@ -182,10 +189,14 @@ if num_tick > 1:
 
             ## Calculate and Append the Sharpe Ratio to Sharpe Ratio Array
             sharpe_arr[ind] = ret_arr[ind] / vol_arr[ind]
+            if ind % 100 == 0:
+                my_bar.progress((ind + 1) / num_of_port, text=progress_text)
+        # clear progress bar
+        my_bar.empty()
 
         ## Let's create a Data Frame with Weights, Returns, Volatitlity, and the Sharpe Ratio
         sim_data = [ret_arr, vol_arr, sharpe_arr, all_weights]
-
+        
         ## Create a Data Frame using above, then Transpose it
         sim_df = pd.DataFrame(data=sim_data).T
 
