@@ -168,7 +168,7 @@ if num_tick > 1:
         sharpe_arr = np.zeros(num_of_port)
 
         ## Track Progress with a Bar
-        progress_text = "Operation in progress. Please wait."
+        progress_text = "Simulations in progress. Please wait."
         my_bar = st.progress(0, text=progress_text)
 
         ## Let's start the Monte Carlo Simulation
