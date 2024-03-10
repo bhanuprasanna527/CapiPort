@@ -31,7 +31,6 @@ st.header(
     divider="rainbow",
 )
 
-
 list_df = pd.read_csv("Data/Company List.csv")
 
 company_name = list_df["Name"].to_list()
@@ -59,6 +58,15 @@ st.markdown(
 st.markdown('<p class="big-font">Select Multiple Companies</p>', unsafe_allow_html=True)
 
 com_sel_name = st.multiselect("", company_name, default=None)
+com_sel_date = []
+
+for i in com_sel_name:
+    d = st.date_input(
+        f"Select your vacation for next year - {i}",
+        value= pd.Timestamp('2021-01-01'),
+        format="YYYY-MM-DD",
+    )
+    com_sel_date.append(d)
 
 com_sel = [company_dict[i] for i in com_sel_name]
 
@@ -66,10 +74,15 @@ num_tick = len(com_sel)
 
 if num_tick > 1:
 
-    com_data = yf.download(com_sel, start="1900-01-01", end="2024-03-08")["Adj Close"]
+    com_data = pd.DataFrame()
+    for cname, cdate in zip(com_sel, com_sel_date):
+        stock_data_temp = yf.download(cname, start=cdate, end=pd.Timestamp.now().strftime('%Y-%m-%d'))['Adj Close']
+        stock_data_temp.name = cname
+        com_data = pd.merge(com_data, stock_data_temp, how="outer", right_index=True, left_index=True)
+
     for i in com_data.columns:
         com_data.dropna(axis=1, how='all', inplace=True)
-    com_data.dropna(inplace=True)
+    # com_data.dropna(inplace=True)
     num_tick = len(com_data.columns)
 
     if num_tick > 1:
@@ -78,7 +91,6 @@ if num_tick > 1:
             com_sel_name_temp.append(company_symbol_dict[i])
 
         com_sel = com_data.columns.to_list()
-        com_sel_name.sort()
 
         st.dataframe(com_data, use_container_width=True)
 
@@ -91,11 +103,11 @@ if num_tick > 1:
         ## Rebalancing Random Weights
         rebal_weig = rand_weig / np.sum(rand_weig)
 
-        ## Calculate the Expected Returns, Annualize it by * 247.0
-        exp_ret = np.sum((log_return.mean() * rebal_weig) * 247)
+        ## Calculate the Expected Returns, Annualize it by * 252.0
+        exp_ret = np.sum((log_return.mean() * rebal_weig) * 252)
 
-        ## Calculate the Expected Volatility, Annualize it by * 247.0
-        exp_vol = np.sqrt(np.dot(rebal_weig.T, np.dot(log_return.cov() * 247, rebal_weig)))
+        ## Calculate the Expected Volatility, Annualize it by * 252.0
+        exp_vol = np.sqrt(np.dot(rebal_weig.T, np.dot(log_return.cov() * 252, rebal_weig)))
 
         ## Calculate the Sharpe Ratio.
         sharpe_ratio = exp_ret / exp_vol
