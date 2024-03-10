@@ -3,3 +3,8 @@
 
 # Ada Library Information
 *.ali
+.devcontainer
+.idea
+.ipynb_checkpoints
+__pycache__
+app.py
