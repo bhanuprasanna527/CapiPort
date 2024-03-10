@@ -65,7 +65,7 @@ com_sel_date = []
 
 for i in com_sel_name:
     d = st.date_input(
-        f"Select your vacation for next year - {i}",
+        f"On which date did you invested in - {i}",
         value= pd.Timestamp('2021-01-01'),
         format="YYYY-MM-DD",
     )
