@@ -178,7 +178,6 @@ if num_tick > 1:
             ## Calculate and Append the Sharpe Ratio to Sharpe Ratio Array
             sharpe_arr[ind] = ret_arr[ind] / vol_arr[ind]
             if ind % 100 == 0:
-                print(ind)
                 my_bar.progress((ind + 1) / num_of_port, text=progress_text)
         # clear progress bar
         my_bar.empty()
