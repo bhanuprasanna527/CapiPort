@@ -4,7 +4,6 @@ import yfinance as yf
 import streamlit as st
 import plotly.graph_objects as go
 import time
-import sys
 import datetime
 
 with open(r"style/style.css") as css:
@@ -77,13 +76,11 @@ com_sel = [company_dict[i] for i in com_sel_name]
 num_tick = len(com_sel)
 
 if num_tick > 1:
-
     com_data = pd.DataFrame()
     for cname, cdate in zip(com_sel, com_sel_date):
-        stock_data_temp = yf.download(cname, start=cdate, end=pd.Timestamp.now().strftime('%Y-%m-%d'))['Adj Close']
+        stock_data_temp = yf.download(cname, start=cdate, end=pd.Timestamp.now().strftime('%Y-%m-%d'))['Low']
         stock_data_temp.name = cname
         com_data = pd.merge(com_data, stock_data_temp, how="outer", right_index=True, left_index=True)
-
     for i in com_data.columns:
         com_data.dropna(axis=1, how='all', inplace=True)
     # com_data.dropna(inplace=True)
