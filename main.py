@@ -5,7 +5,7 @@ import streamlit as st
 import plotly.graph_objects as go
 import time
 import sys
-
+import datetime
 
 with open(r"style/style.css") as css:
     st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
@@ -69,6 +69,7 @@ for i in com_sel_name:
         value= pd.Timestamp('2021-01-01'),
         format="YYYY-MM-DD",
     )
+    d = d - datetime.timedelta(days=3)
     com_sel_date.append(d)
 
 com_sel = [company_dict[i] for i in com_sel_name]
