@@ -4,6 +4,7 @@ import yfinance as yf
 import streamlit as st
 import plotly.graph_objects as go
 import time
+from utilities import checker
 import datetime
 
 with open(r"../style/style.css") as css:
@@ -74,6 +75,7 @@ for i in com_sel_name:
 com_sel = [company_dict[i] for i in com_sel_name]
 
 num_tick = len(com_sel)
+
 
 if num_tick > 1:
     com_data = pd.DataFrame()

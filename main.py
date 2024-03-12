@@ -279,45 +279,48 @@ if num_tick > 1:
 
         st.markdown("<h1 style='text-align: center;'>Plotting</h1>", unsafe_allow_html=True)
 
+
+        # plot a pie chart using plotly for max sharpe ratio
         fig = go.Figure(
-            data=go.Scatter(
-                x=sim_df["Volatility"],
-                y=sim_df["Returns"],
-                mode="markers",
-                marker=dict(color=sim_df["Sharpe Ratio"], colorscale="RdYlBu", size=10),
+            data=go.Pie(
+                labels=com_sel_name_temp,
+                values=max_sharpe_ratio["Portfolio Weights"],
+                hole=0.3,
+                textinfo='percent+label', # Information to display on the pie slices
+                hoverinfo='label+percent',# Information to display on hover
+                marker=dict( line=dict(color='white', width=2)) 
             )
         )
+
+        # update colors
+        fig.update_traces(
+            marker=dict(
+                colors=[
+                    "lightseagreen",
+                    "lightcoral",
+                    "lightskyblue",
+                    "lightgreen",
+                    "lightpink",
+                    "lightyellow",
+                    "lightblue",
+                    "lightgrey",
+                    "lightgoldenrodyellow",
+                    "lightcyan",
+                ]
+            )
+        )
+
+        # update layout of the pie chart
 
         # Add color bar
         fig.update_layout(coloraxis_colorbar=dict(title="Sharpe Ratio"))
 
         # Add title and axis labels
         fig.update_layout(
-            title="Portfolio Returns Vs. Risk",
-            xaxis=dict(title="Standard Deviation / Volatility"),
-            yaxis=dict(title="Returns"),
+            title="Portfolio Composition",
+            showlegend=False,
+            height=500,
+            width=700,
+            margin=dict(l=50, r=50, t=50, b=50),
         )
-
-        # Plot the Max Sharpe Ratio, using a `Red Star`.
-        fig.add_trace(
-            go.Scatter(
-                x=[max_sharpe_ratio[1]],
-                y=[max_sharpe_ratio[0]],
-                mode="markers",
-                marker=dict(color="red", symbol="star", size=20),
-                name="Max Sharpe Ratio",
-            )
-        )
-
-        # Plot the Min Volatility, using a `Blue Star`.
-        fig.add_trace(
-            go.Scatter(
-                x=[min_volatility[1]],
-                y=[min_volatility[0]],
-                mode="markers",
-                marker=dict(color="blue", symbol="star", size=20),
-                name="Min Volatility",
-            )
-        )
-
         st.plotly_chart(fig, use_container_width=True)
