@@ -5,6 +5,8 @@ import streamlit as st
 import plotly.graph_objects as go
 import time
 import datetime
+from utilities import moving_average, percentage_return
+
 
 with open(r"style/style.css") as css:
     st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
@@ -94,24 +96,10 @@ if num_tick > 1:
     st.dataframe(com_data, use_container_width=True)
 
     # make a function to calculate moving averages from the dataframe com_data, store those moving averages in dictionary for respective company
-    def moving_average(data, window):
-        ma = {}
-        for i in data.columns:
-            ma[i] = data[i].rolling(window=window).mean().values[2]
-        return ma
-
     moving_avg = moving_average(com_data, 3)
     MA_df = pd.DataFrame(moving_avg.items(), columns=["Company", "Purchase Rate (MA)"])
 
     # calculate percentage return till present date from the moving average price of the stock
-    def percentage_return(data, moving_avg):
-        pr = {}
-        for i in data.columns:
-            pr[i] = (
-                f"{round(((data[i].values[-1] - moving_avg[i]) / moving_avg[i]) * 100,2) }%"
-            )
-        return pr
-
     # make percentage return a dataframe from dictionary
     percentage_return = pd.DataFrame(
         percentage_return(com_data, moving_avg).items(),
