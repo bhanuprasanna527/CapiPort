@@ -5,7 +5,7 @@ import streamlit as st
 import plotly.graph_objects as go
 import time
 import datetime
-from utilities import moving_average, percentage_return
+from utilities.checker import moving_average, percentage_return
 
 
 with open(r"style/style.css") as css:
