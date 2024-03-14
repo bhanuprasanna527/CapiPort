@@ -65,7 +65,7 @@ com_sel_date = []
 for i in com_sel_name:
     d = st.date_input(
         f"On which date did you invested in - {i}",
-        value= pd.Timestamp('2021-01-01'),
+        value=pd.Timestamp("2021-01-01"),
         format="YYYY-MM-DD",
     )
     d = d - datetime.timedelta(days=3)
@@ -78,11 +78,15 @@ num_tick = len(com_sel)
 if num_tick > 1:
     com_data = pd.DataFrame()
     for cname, cdate in zip(com_sel, com_sel_date):
-        stock_data_temp = yf.download(cname, start=cdate, end=pd.Timestamp.now().strftime('%Y-%m-%d'))['Low']
+        stock_data_temp = yf.download(
+            cname, start=cdate, end=pd.Timestamp.now().strftime("%Y-%m-%d")
+        )["Low"]
         stock_data_temp.name = cname
-        com_data = pd.merge(com_data, stock_data_temp, how="outer", right_index=True, left_index=True)
+        com_data = pd.merge(
+            com_data, stock_data_temp, how="outer", right_index=True, left_index=True
+        )
     for i in com_data.columns:
-        com_data.dropna(axis=1, how='all', inplace=True)
+        com_data.dropna(axis=1, how="all", inplace=True)
     # com_data.dropna(inplace=True)
     num_tick = len(com_data.columns)
 
@@ -97,28 +101,36 @@ if num_tick > 1:
         return ma
 
     moving_avg = moving_average(com_data, 3)
-    MA_df = pd.DataFrame(moving_avg.items(), columns=['Company', 'Purchase Rate (MA)'])
+    MA_df = pd.DataFrame(moving_avg.items(), columns=["Company", "Purchase Rate (MA)"])
 
     # calculate percentage return till present date from the moving average price of the stock
     def percentage_return(data, moving_avg):
         pr = {}
         for i in data.columns:
-            pr[i] = f'{round(((data[i].values[-1] - moving_avg[i]) / moving_avg[i]) * 100,2) }%'
+            pr[i] = (
+                f"{round(((data[i].values[-1] - moving_avg[i]) / moving_avg[i]) * 100,2) }%"
+            )
         return pr
-    
-    # make percentage return a dataframe from dictionary
-    percentage_return = pd.DataFrame(percentage_return(com_data, moving_avg).items(), columns=['Company', 'Percentage Return'])
 
-    #merge MA_df and percentage_return on "Company" columns
-    MA_df = pd.merge(MA_df, percentage_return, on='Company')
+    # make percentage return a dataframe from dictionary
+    percentage_return = pd.DataFrame(
+        percentage_return(com_data, moving_avg).items(),
+        columns=["Company", "Percentage Return"],
+    )
+
+    # merge MA_df and percentage_return on "Company" columns
+    MA_df = pd.merge(MA_df, percentage_return, on="Company")
 
     st.markdown(
-            "<h5 style='text-align: center;'>Percent Returns & MA price</h5>",
-            unsafe_allow_html=True,
-        )
+        "<h5 style='text-align: center;'>Percent Returns & MA price</h5>",
+        unsafe_allow_html=True,
+    )
 
-    st.write("<p style='text-align: center;'>**rate of purchase is moving average(MA) of 3 (t+2) days</p>", unsafe_allow_html=True) 
-    st.dataframe(MA_df,use_container_width=True)
+    st.write(
+        "<p style='text-align: center;'>**rate of purchase is moving average(MA) of 3 (t+2) days</p>",
+        unsafe_allow_html=True,
+    )
+    st.dataframe(MA_df, use_container_width=True)
 
     if num_tick > 1:
         com_sel_name_temp = []
@@ -131,8 +143,7 @@ if num_tick > 1:
         log_return = np.log(1 + com_data.pct_change())
 
         ## Generate Random Weights
-        rand_weig = np.array(np.random.random(num_tick))
-
+        rand_weig = np.array([100 / len(com_sel)] * len(com_sel))
         ## Rebalancing Random Weights
         rebal_weig = rand_weig / np.sum(rand_weig)
 
@@ -140,7 +151,9 @@ if num_tick > 1:
         exp_ret = np.sum((log_return.mean() * rebal_weig) * 252)
 
         ## Calculate the Expected Volatility, Annualize it by * 252.0
-        exp_vol = np.sqrt(np.dot(rebal_weig.T, np.dot(log_return.cov() * 252, rebal_weig)))
+        exp_vol = np.sqrt(
+            np.dot(rebal_weig.T, np.dot(log_return.cov() * 252, rebal_weig))
+        )
 
         ## Calculate the Sharpe Ratio.
         sharpe_ratio = exp_ret / exp_vol
@@ -149,7 +162,6 @@ if num_tick > 1:
         weights_df = pd.DataFrame(
             data={
                 "company_name": com_sel_name_temp,
-                "random_weights": rand_weig,
                 "rebalance_weights": rebal_weig,
             }
         )
@@ -176,7 +188,6 @@ if num_tick > 1:
         )
         st.dataframe(metrics_df, use_container_width=True)
 
-
         ## Let's get started with Monte Carlo Simulations
 
         ## How many times should we run Monte Carlo
@@ -199,7 +210,9 @@ if num_tick > 1:
         my_bar = st.progress(0, text=progress_text)
 
         ## Let's start the Monte Carlo Simulation
-        for ind in range(num_of_port):  # Corrected the range to iterate from 0 to num_of_port
+        for ind in range(
+            num_of_port
+        ):  # Corrected the range to iterate from 0 to num_of_port
             time.sleep(0.001)
             ## Let's first Calculate the Weights
             weig = np.array(np.random.random(num_tick))
@@ -223,7 +236,7 @@ if num_tick > 1:
 
         ## Let's create a Data Frame with Weights, Returns, Volatitlity, and the Sharpe Ratio
         sim_data = [ret_arr, vol_arr, sharpe_arr, all_weights]
-        
+
         ## Create a Data Frame using above, then Transpose it
         sim_df = pd.DataFrame(data=sim_data).T
 
@@ -263,8 +276,8 @@ if num_tick > 1:
 
         min_volatility_weights_df = pd.DataFrame(
             data={
-                "company_name": com_sel_name_temp,
-                "random_weights": min_volatility["Portfolio Weights"],
+                "company name": com_sel_name_temp,
+                "optimized weights": min_volatility["Portfolio Weights"],
             }
         )
 
@@ -277,8 +290,9 @@ if num_tick > 1:
 
         st.divider()
 
-        st.markdown("<h1 style='text-align: center;'>Plotting</h1>", unsafe_allow_html=True)
-
+        st.markdown(
+            "<h1 style='text-align: center;'>Plotting</h1>", unsafe_allow_html=True
+        )
 
         # plot a pie chart using plotly for max sharpe ratio
         fig = go.Figure(
@@ -286,9 +300,9 @@ if num_tick > 1:
                 labels=com_sel_name_temp,
                 values=max_sharpe_ratio["Portfolio Weights"],
                 hole=0.3,
-                textinfo='percent+label', # Information to display on the pie slices
-                hoverinfo='label+percent',# Information to display on hover
-                marker=dict( line=dict(color='white', width=2)) 
+                textinfo="percent+label",  # Information to display on the pie slices
+                hoverinfo="label+percent",  # Information to display on hover
+                marker=dict(line=dict(color="white", width=2)),
             )
         )
 
