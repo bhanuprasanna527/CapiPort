@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 def streamlit_style():
     with open(r"utilities/style/style.css") as css:
         st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
@@ -38,4 +39,6 @@ def streamlit_style():
         unsafe_allow_html=True,
     )
 
-    st.markdown('<p class="big-font">Select Multiple Companies</p>', unsafe_allow_html=True)
+    st.markdown(
+        '<p class="big-font">Select Multiple Companies</p>', unsafe_allow_html=True
+    )
