@@ -25,60 +25,38 @@ company_symbol = (company_list_df["Ticker"] + ".NS").to_list()
 name_to_symbol_dict = dict()
 symbol_to_name_dict = dict()
 
-start_date = 0
-initial_investment = 0
-
-streamlit_company_list_input = 0
-optimization_methods = 0
-
 for CSymbol, CName in zip(company_symbol, company_name):
     name_to_symbol_dict[CName] = CSymbol
 
 for CSymbol, CName in zip(company_symbol, company_name):
     symbol_to_name_dict[CSymbol] = CName
 
-col1, col2 = st.columns([4, 6])
+streamlit_company_list_input = st.multiselect(
+    "Select Multiple Companies", company_name, default=None
+)
 
-with col1:
-    st.write("##")
-    st.write("Select Multiple Companies", unsafe_allow_html=True)
-with col2:
-    streamlit_company_list_input = st.multiselect("", company_name, default=None)
-
-with col1:
-    st.write("##")
-    st.write("Select an Optimsation Technique", unsafe_allow_html=True)
-with col2:
-    optimization_methods = st.selectbox(
-        "",
-        (
-            "Maximum Sharpe Ratio",
-            "Efficient Risk",
-            "Minimum Volatility",
-            "Efficient Return",
-        ),
-    )
+optimization_methods = st.selectbox(
+    "Select an Optimsation Technique",
+    (
+        "Maximum Sharpe Ratio",
+        "Efficient Risk",
+        "Minimum Volatility",
+        "Efficient Return",
+    ),
+)
 
 company_name_to_symbol = [name_to_symbol_dict[i] for i in streamlit_company_list_input]
 
 number_of_symbols = len(company_name_to_symbol)
 
-with col1:
-    st.write("##")
-    st.write("Start Date")
-with col2:
-    start_date = st.date_input(
-        "",
-        format="YYYY-MM-DD",
-        value=pd.Timestamp("1947-08-15"),
-        max_value=pd.Timestamp.now(),
-    )
+start_date = st.date_input(
+    "Start Date",
+    format="YYYY-MM-DD",
+    value=pd.Timestamp("1947-08-15"),
+    max_value=pd.Timestamp.now(),
+)
 
-with col1:
-    st.write("##")
-    st.write("How much would you want to invest?")
-with col2:
-    initial_investment = st.number_input("", value=45000)
+initial_investment = st.number_input("How much would you want to invest?", value=45000)
 
 if number_of_symbols > 1:
     company_data = pd.DataFrame()
