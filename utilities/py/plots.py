@@ -2,8 +2,9 @@ import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
 
+
 def pie_chart_company_asset_weights(company_asset_weights):
-    
+
     # Define custom colors
     custom_colors = px.colors.qualitative.Pastel
 

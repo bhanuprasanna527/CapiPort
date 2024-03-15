@@ -6,6 +6,7 @@ import streamlit as st
 
 from utilities.py.styling import streamlit_style
 from utilities.py import plots
+from utilities.py import summary_tables
 
 from pypfopt import EfficientFrontier
 from pypfopt import risk_models
@@ -36,6 +37,21 @@ company_name_to_symbol = [name_to_symbol_dict[i] for i in streamlit_company_list
 
 number_of_symbols = len(company_name_to_symbol)
 
+col1, col2 = st.columns([1, 3])
+start_date = 0
+
+with col1:
+    st.write("##")
+    st.write("Start Date: ")
+with col2:
+    start_date = st.date_input(
+        "",
+        format="YYYY-MM-DD",
+        value=pd.Timestamp("1947-08-15"),
+        max_value=pd.Timestamp.now(),
+    )
+
+
 initial_investment = st.number_input("How much would you want to invest?", value=100000)
 
 if number_of_symbols > 1:
@@ -44,7 +60,7 @@ if number_of_symbols > 1:
 
     for cname in company_name_to_symbol:
         stock_data_temp = yf.download(
-            cname, start="1900-01-01", end=pd.Timestamp.now().strftime("%Y-%m-%d")
+            cname, start=start_date, end=pd.Timestamp.now().strftime("%Y-%m-%d")
         )["Adj Close"]
         stock_data_temp.name = cname
         company_data = pd.merge(
@@ -77,7 +93,10 @@ if number_of_symbols > 1:
         S = risk_models.sample_cov(company_data)
 
         ef = EfficientFrontier(mu, S)
-        ef.max_sharpe()
+        # ef.min_volatility()
+        # ef.max_sharpe()
+        # ef.efficient_risk(0.376)
+        ef.efficient_return(0.05)
 
         company_asset_weights = pd.DataFrame.from_dict(
             ef.clean_weights(), orient="index"
@@ -94,6 +113,8 @@ if number_of_symbols > 1:
         company_asset_weights = company_asset_weights[["Name", "Ticker", "Allocation"]]
 
         st.dataframe(company_asset_weights, use_container_width=True)
+
+        ef.portfolio_performance(verbose=True)
 
         expected_annual_return, annual_volatility, sharpe_ratio = (
             ef.portfolio_performance()
@@ -126,3 +147,6 @@ if number_of_symbols > 1:
 
         plots.plot_annual_returns(annual_portfolio_returns)
         plots.plot_cummulative_returns(cumulative_returns)
+
+        summary_tables.annual_returns_dataframe(annual_portfolio_returns)
+        summary_tables.cumulative_returns_dataframe(cumulative_returns)
