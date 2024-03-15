@@ -2,17 +2,22 @@ import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
 
-
 def pie_chart_company_asset_weights(company_asset_weights):
-    # Create pie chart
+    
+    # Define custom colors
+    custom_colors = px.colors.qualitative.Pastel
+
+    explode_dist = [0.03] * len(company_asset_weights)
+
     fig = go.Figure(
         data=[
             go.Pie(
                 labels=company_asset_weights["Name"],
                 values=company_asset_weights["Allocation"],
-                marker=dict(colors=px.colors.qualitative.Light24),
+                pull=explode_dist,
+                marker=dict(colors=custom_colors),
                 textposition="inside",
-                pull=[0.1] * len(company_asset_weights),
+                hoverinfo="label+percent",
                 textinfo="percent+label",
             )
         ]
@@ -24,27 +29,18 @@ def pie_chart_company_asset_weights(company_asset_weights):
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         autosize=True,
         width=700,
-        height=600,
+        height=700,
+        font=dict(
+            family="League Spartan",
+        ),
+        plot_bgcolor="white",  # Set background color
     )
 
     fig.update_traces(
-        marker=dict(
-            colors=[
-                "lightseagreen",
-                "lightcoral",
-                "lightskyblue",
-                "lightgreen",
-                "lightpink",
-                "lightyellow",
-                "lightblue",
-                "lightgrey",
-                "lightgoldenrodyellow",
-                "lightcyan",
-            ]
-        )
+        textfont=dict(size=12),  # Adjust text font size
     )
 
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def plot_annual_returns(annual_portfolio_returns):
@@ -67,7 +63,7 @@ def plot_annual_returns(annual_portfolio_returns):
         yaxis=dict(tickformat=".2%"),
     )
 
-    st.plotly_chart(annual_returns_fig)
+    st.plotly_chart(annual_returns_fig, use_container_width=True)
 
 
 def plot_cummulative_returns(cumulative_returns):
@@ -89,4 +85,4 @@ def plot_cummulative_returns(cumulative_returns):
     )
 
     # Display both plots
-    st.plotly_chart(cumulative_returns_fig)
+    st.plotly_chart(cumulative_returns_fig, use_container_width=True)
