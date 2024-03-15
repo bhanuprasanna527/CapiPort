@@ -25,24 +25,47 @@ company_symbol = (company_list_df["Ticker"] + ".NS").to_list()
 name_to_symbol_dict = dict()
 symbol_to_name_dict = dict()
 
+start_date = 0
+initial_investment = 0
+
+streamlit_company_list_input = 0
+optimization_methods = 0
+
 for CSymbol, CName in zip(company_symbol, company_name):
     name_to_symbol_dict[CName] = CSymbol
 
 for CSymbol, CName in zip(company_symbol, company_name):
     symbol_to_name_dict[CSymbol] = CName
 
-streamlit_company_list_input = st.multiselect("", company_name, default=None)
+col1, col2 = st.columns([4, 6])
+
+with col1:
+    st.write("##")
+    st.write("Select Multiple Companies", unsafe_allow_html=True)
+with col2:
+    streamlit_company_list_input = st.multiselect("", company_name, default=None)
+
+with col1:
+    st.write("##")
+    st.write("Select an Optimsation Technique", unsafe_allow_html=True)
+with col2:
+    optimization_methods = st.selectbox(
+        "",
+        (
+            "Maximum Sharpe Ratio",
+            "Efficient Risk",
+            "Minimum Volatility",
+            "Efficient Return",
+        ),
+    )
 
 company_name_to_symbol = [name_to_symbol_dict[i] for i in streamlit_company_list_input]
 
 number_of_symbols = len(company_name_to_symbol)
 
-col1, col2 = st.columns([1, 3])
-start_date = 0
-
 with col1:
     st.write("##")
-    st.write("Start Date: ")
+    st.write("Start Date")
 with col2:
     start_date = st.date_input(
         "",
@@ -51,11 +74,13 @@ with col2:
         max_value=pd.Timestamp.now(),
     )
 
-
-initial_investment = st.number_input("How much would you want to invest?", value=100000)
+with col1:
+    st.write("##")
+    st.write("How much would you want to invest?")
+with col2:
+    initial_investment = st.number_input("", value=45000)
 
 if number_of_symbols > 1:
-
     company_data = pd.DataFrame()
 
     for cname in company_name_to_symbol:
@@ -85,18 +110,21 @@ if number_of_symbols > 1:
     st.dataframe(company_data, use_container_width=True)
 
     if number_of_symbols > 1:
-
         company_stock_returns_data = company_data.pct_change().dropna()
-        # annual_returns = .resample('Y').ffill().pct_change()
 
         mu = expected_returns.mean_historical_return(company_data)
         S = risk_models.sample_cov(company_data)
 
         ef = EfficientFrontier(mu, S)
-        # ef.min_volatility()
-        # ef.max_sharpe()
-        # ef.efficient_risk(0.376)
-        ef.efficient_return(0.05)
+
+        if optimization_methods == "Maximum Sharpe Raio":
+            ef.max_sharpe()
+        elif optimization_methods == "Minimum Volatility":
+            ef.min_volatility()
+        elif optimization_methods == "Efficient Risk":
+            ef.efficient_risk(0.5)
+        else:
+            ef.efficient_return(0.05)
 
         company_asset_weights = pd.DataFrame.from_dict(
             ef.clean_weights(), orient="index"
@@ -114,11 +142,13 @@ if number_of_symbols > 1:
 
         st.dataframe(company_asset_weights, use_container_width=True)
 
-        ef.portfolio_performance(verbose=True)
+        ef.portfolio_performance()
 
-        expected_annual_return, annual_volatility, sharpe_ratio = (
-            ef.portfolio_performance()
-        )
+        (
+            expected_annual_return,
+            annual_volatility,
+            sharpe_ratio,
+        ) = ef.portfolio_performance()
 
         st_portfolio_performance = pd.DataFrame.from_dict(
             {
@@ -130,6 +160,8 @@ if number_of_symbols > 1:
         ).reset_index()
 
         st_portfolio_performance.columns = ["Metrics", "Summary"]
+
+        st.write("Optimization Method - ", optimization_methods)
 
         st.dataframe(st_portfolio_performance, use_container_width=True)
 
@@ -145,8 +177,12 @@ if number_of_symbols > 1:
 
         cumulative_returns = (portfolio_returns + 1).cumprod() * initial_investment
 
-        plots.plot_annual_returns(annual_portfolio_returns)
-        plots.plot_cummulative_returns(cumulative_returns)
+        tab1, tab2 = st.tabs(["Plots", "Tables"])
 
-        summary_tables.annual_returns_dataframe(annual_portfolio_returns)
-        summary_tables.cumulative_returns_dataframe(cumulative_returns)
+        with tab1:
+            plots.plot_annual_returns(annual_portfolio_returns)
+            plots.plot_cummulative_returns(cumulative_returns)
+
+        with tab2:
+            summary_tables.annual_returns_dataframe(annual_portfolio_returns)
+            summary_tables.cumulative_returns_dataframe(cumulative_returns)

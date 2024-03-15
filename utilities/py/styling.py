@@ -38,7 +38,3 @@ def streamlit_style():
         </style>""",
         unsafe_allow_html=True,
     )
-
-    st.markdown(
-        '<p class="big-font">Select Multiple Companies</p>', unsafe_allow_html=True
-    )
